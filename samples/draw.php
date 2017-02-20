@@ -5,8 +5,8 @@
 	<style type="text/css">
 		.graph
 		{
-			max-width: 100%;
-			max-height: 100%;
+			width: 500px;
+			height: 500px;
 		}
 
 		.graph > line
@@ -28,8 +28,8 @@
 		<input type="text" name="expr" required value="<?php if(isset($_POST["expr"])) echo $_POST["expr"]; ?>" />
 		<br />
 		<br />
-		<label for="low">Lower bound: </label><input type="number" name="low" id="low" required value="<?php if(isset($_POST["low"])) echo $_POST["low"]; ?>" />
-		<label for="high">Upper bound: </label><input type="number" name="high" id="high" required value="<?php if(isset($_POST["high"])) echo $_POST["high"]; ?>" />
+		<label for="low">Lower bound: </label><input type="number" step="0.001" name="low" id="low" required value="<?php if(isset($_POST["low"])) echo $_POST["low"]; ?>" />
+		<label for="high">Upper bound: </label><input type="number" step="0.001" name="high" id="high" required value="<?php if(isset($_POST["high"])) echo $_POST["high"]; ?>" />
 		<input type="submit" name="submit" value="Go" />
 	</form>
 	<br />
@@ -78,11 +78,6 @@
 			echo 'y1="' . -$start->y . '" y2="' . -$end->y . '" />';
 		}
 
-		function drawText(Point $point, string $text)
-		{
-
-		}
-
 		if(isset($_POST["expr"]))
 		{
 			$expr = $_POST["expr"];
@@ -96,6 +91,7 @@
 			foreach(range($minX, $maxX, ($maxX - $minX) / 500) as $xVal)
 			{
 				$result = Calculator::EvaluateCompiledExpression($compiledExpression, $xVal);
+				
 				if(is_finite($result))
 					$points[] = new Point($xVal, floatval($result));
 			}
@@ -115,7 +111,7 @@
 
 			?>
 				<div style="width:1000px;height:1000px">
-				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" viewbox="<?php echo "$viewX $viewY $width $height"; ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" class="graph" viewbox="<?php echo "$viewX $viewY $width $height"; ?>">
 			<?php
 
 			drawLine(new Point($viewX, 0), new Point($viewX + $width, 0));
