@@ -103,7 +103,7 @@
 			
 			$ident .= $this->Consume();
 
-			while(ctype_alnum($this->Peek()))
+			while(ctype_alnum($this->Peek()) || $this->Peek() == "_")
 				$ident .= $this->Consume();
 
 			return new Token("Identifier", $ident);
