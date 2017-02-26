@@ -62,7 +62,7 @@
 
 			if(($token = $this->ConsumeComma()) != NULL)
 				return $token;
-			
+
 			if(($token = $this->ConsumeParentheses()) != NULL)
 				return $token;
 
@@ -100,7 +100,7 @@
 
 			if($this->Peek() != "_" && !ctype_alpha($this->Peek()))
 				return NULL;
-			
+
 			$ident .= $this->Consume();
 
 			while(ctype_alnum($this->Peek()) || $this->Peek() == "_")
@@ -121,6 +121,8 @@
 					return new Token("Multiplication", $this->Consume());
 				case "/":
 					return new Token("Division", $this->Consume());
+				case "%":
+					return new Token("Modulo", $this->Consume());
 				case "^":
 					return new Token("Exponentiation", $this->Consume());
 
@@ -163,7 +165,7 @@
 
 			if(ctype_digit($this->Peek()))
 				$res .= $this->ConsumeInteger();
-			
+
 			//Lex decimal places, if it exists
 			if($this->Peek() == ".")
 			{

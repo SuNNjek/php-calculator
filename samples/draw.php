@@ -109,6 +109,8 @@
 			$viewY = -($minY + $maxY + $height) / 2;
 			$viewX = ($minX + $maxX - $width) / 2;
 
+			echo "Postfix: $compiledExpression";
+
 			?>
 				<div style="width:1000px;height:1000px">
 				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" class="graph" viewbox="<?php echo "$viewX $viewY $width $height"; ?>">

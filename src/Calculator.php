@@ -40,13 +40,13 @@ class Calculator
 		return Calculator::EvaluateCompiledExpression($compiledExpr, $value);
 	}
 
-    public static function EvaluateCompiledExpression(Expression $expression, float $value)
+	public static function EvaluateCompiledExpression(Expression $expression, float $value)
 	{
-        $stack = new Stack();
+		$stack = new Stack();
 
 		foreach($expression->tokens as $token)
 		{
-            switch($token->Type)
+			switch($token->Type)
 			{
 				case "Number":
 					$stack->Push(floatval($token->Value));
@@ -68,30 +68,37 @@ class Calculator
 					}
 					break;
 
-                case "Plus":
-                    $second = $stack->Pop();
-                    $first = $stack->Pop();
+				case "Plus":
+					$second = $stack->Pop();
+					$first = $stack->Pop();
 
-                    $stack->Push($first + $second);
-                    break;
-                case "Minus":
-                    $second = $stack->Pop();
-                    $first = $stack->Pop();
+					$stack->Push($first + $second);
+					break;
+				case "Minus":
+					$second = $stack->Pop();
+					$first = $stack->Pop();
 
 					$stack->Push($first - $second);
-                    break;
-                case "Multiplication":
-                    $second = $stack->Pop();
-                    $first = $stack->Pop();
+					break;
+				case "Multiplication":
+					$second = $stack->Pop();
+					$first = $stack->Pop();
 
-                    $stack->Push($first * $second);
-                    break;
-                case "Division":
-                    $second = $stack->Pop();
-                    $first = $stack->Pop();
+					$stack->Push($first * $second);
+					break;
+				case "Division":
+					$second = $stack->Pop();
+					$first = $stack->Pop();
 
-                    $stack->Push($first / $second);
-                    break;
+					$stack->Push($first / $second);
+					break;
+
+				case "Modulo":
+					$second = $stack->Pop();
+					$first = $stack->Pop();
+
+					$stack->Push(fmod($first, $second));
+					break;
 
 				case "Exponentiation":
 					$exponent = $stack->Pop();
@@ -103,6 +110,30 @@ class Calculator
 				case "Identifier":
 					switch($token->Value)
 					{
+						case "sqrt":
+							$stack->Push(sqrt($stack->Pop()));
+							break;
+						case "root":
+							$root = $stack->Pop();
+							$num = $stack->Pop();
+
+							$stack->Push(pow($num, 1 / $root));
+							break;
+
+						case "abs":
+							$stack->Push(abs($stack->Pop()));
+							break;
+
+						case "sign":
+							$value = $stack->Pop();
+							if($value > 0)
+								$stack->Push(1);
+							else if($value < 0)
+								$stack->Push(-1);
+							else
+								$stack->Push(0);
+							break;
+
 						case "sin":
 							$stack->Push(sin($stack->Pop()));
 							break;
@@ -191,6 +222,7 @@ class Calculator
 				case "Minus":
 				case "Multiplication":
 				case "Division":
+				case "Modulo":
 				case "Exponentiation":
 
 					while(!$stack->IsEmpty() && Calculator::is_operator(($op = $stack->Top())))
@@ -264,6 +296,7 @@ class Calculator
 			case "Minus":
 			case "Multiplication":
 			case "Division":
+			case "Modulo":
 			case "Exponentiation":
 				return true;
 				
@@ -282,6 +315,7 @@ class Calculator
 			case "Minus":
 			case "Multiplication":
 			case "Division":
+			case "Modulo":
 				return true;
 
 			default:
@@ -298,6 +332,7 @@ class Calculator
 				return 1;
 			case "Multiplication":
 			case "Division":
+			case "Modulo":
 				return 2;
 			case "Exponentiation":
 				return 3;
